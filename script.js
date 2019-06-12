@@ -23,3 +23,25 @@ fetch('http://localhost:3000/comidas')
   .catch((erro)=>{
     console.log(erro)
   })
+
+const botao = document.querySelector('#criar_comida_button')
+botao.addEventListener("click", criarComida)
+
+function criarComida () {
+  const nome = document.querySelector("#nome_input").value
+  const descricao = document.querySelector("#descricao_input").value
+  const imagem = document.querySelector("#imagem_input").value
+  const comida = {
+    nome, descricao, imagem
+  }
+  fetch(
+    'http://localhost:3000/comidas',
+    {
+      method: 'POST',
+      body: JSON.stringify(comida),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  ).then(response => console.log("criou!"))
+}
