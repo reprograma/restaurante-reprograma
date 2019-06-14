@@ -15,11 +15,34 @@ fetch('http://localhost:3000/comidas')
           <h5 class="mt-0"><strong>${prato.nome}</strong></h5>
           ${prato.descricao}
         </div>`
+
         container.appendChild(mediaItem);
-    }
-    )
-  }
-  )
+        const buttonDelete = document.createElement("button")
+        buttonDelete.textContent = "Remover"
+        buttonDelete.setAttribute("class", "btn btn-info")
+        buttonDelete.setAttribute("data-id", prato._id)
+        mediaItem.appendChild(buttonDelete)
+
+        buttonDelete.addEventListener("click", () =>{
+          fetch(
+            `http://localhost:3000/comidas/${prato._id}`,
+            {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          ).then((response) => {
+            console.log(response)
+            if(response.status === 204) {
+              window.location.reload()
+            } else {
+              window.alert("Deu erro ao deletar, sorry")
+            }
+          })
+        })
+    })
+  })
   .catch((erro)=>{
     console.log(erro)
   })
@@ -31,9 +54,11 @@ function criarComida () {
   const nome = document.querySelector("#nome_input").value
   const descricao = document.querySelector("#descricao_input").value
   const imagem = document.querySelector("#imagem_input").value
+
   const comida = {
     nome, descricao, imagem
   }
+
   fetch(
     'http://localhost:3000/comidas',
     {
